@@ -21,7 +21,7 @@ package flash.display3D;
 
 import openfl.gl.GL;
 
-@:coreType abstract    Context3DBlendFactor( Int )   {
+abstract Context3DBlendFactor( Int )   {
 	inline function new(a:Int)
     {
 		this = a;
