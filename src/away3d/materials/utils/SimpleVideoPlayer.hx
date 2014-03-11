@@ -51,7 +51,9 @@ class SimpleVideoPlayer implements IVideoPlayer {
         "close":streamClose};
 // NetConnection
         _nc = new NetConnection();
+        #if flash
         _nc.client = _nsClient;
+        #end
         _nc.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler, false, 0, true);
         _nc.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler, false, 0, true);
         _nc.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler, false, 0, true);
@@ -59,7 +61,9 @@ class SimpleVideoPlayer implements IVideoPlayer {
         _nc.connect(null);
 // NetStream
         _ns = new NetStream(_nc);
+        #if flash
         _ns.checkPolicyFile = true;
+        #end
         _ns.client = _nsClient;
         _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler, false, 0, true);
         _ns.addEventListener(AsyncErrorEvent.ASYNC_ERROR, asyncErrorHandler, false, 0, true);
@@ -82,13 +86,17 @@ class SimpleVideoPlayer implements IVideoPlayer {
             return;
         }
         if (_paused) {
+            #if flash
             _ns.resume();
+            #end
             _paused = false;
             _playing = true;
         }
 
         else if (!_playing) {
+            #if flash
             _ns.play(_src);
+            #end
             _playing = true;
             _paused = false;
         }
