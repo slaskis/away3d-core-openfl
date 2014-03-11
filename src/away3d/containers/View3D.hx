@@ -1,27 +1,25 @@
 package away3d.containers;
 
 import flash.display.Stage;
-import flash.errors.Error;
-import flash.events.EventDispatcher;
-import flash.geom.Transform;
-import flash.Lib;
-import away3d.core.managers.Touch3DManager;
-import away3d.events.Scene3DEvent;
 import flash.display.Sprite;
 import flash.display3D.Context3D;
 import flash.display3D.Context3DTextureFormat;
 import flash.display3D.textures.Texture;
- 
+import flash.errors.Error;
 import flash.events.Event;
+import flash.events.EventDispatcher;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.geom.Transform;
 import flash.geom.Vector3D;
+import flash.Lib;
 
 import away3d.cameras.Camera3D;
 import away3d.core.managers.Mouse3DManager;
 import away3d.core.managers.RTTBufferManager;
 import away3d.core.managers.Stage3DManager;
 import away3d.core.managers.Stage3DProxy;
+import away3d.core.managers.Touch3DManager;
 import away3d.core.pick.IPicker;
 import away3d.core.render.DefaultRenderer;
 import away3d.core.render.DepthRenderer;
@@ -30,6 +28,7 @@ import away3d.core.render.RendererBase;
 import away3d.core.traverse.EntityCollector;
 import away3d.events.CameraEvent;
 import away3d.events.Stage3DEvent;
+import away3d.events.Scene3DEvent;
 import away3d.textures.Texture2DBase;
 
 class View3D  extends EventDispatcher {
@@ -52,7 +51,15 @@ class View3D  extends EventDispatcher {
     public var mousePicker(get_mousePicker, set_mousePicker):IPicker;
     public var touchPicker(get_touchPicker, set_touchPicker):IPicker;
     public var entityCollector(get_entityCollector, never):EntityCollector;
-	
+    public var mouseX (get_mouseX, never):Float;
+    public var mouseY (get_mouseY, never):Float;
+    public var parent (get_parent, never):Stage;
+    public var stage (get_stage, never):Stage;
+    public var width (get_width, set_width):Float;
+    public var height (get_height, set_height):Float;
+    public var x (get_x, set_x):Float;
+    public var y (get_y, set_y):Float;
+
 	private var _x:Float;
     private var _y:Float;
     private var _width:Float;
@@ -77,7 +84,7 @@ class View3D  extends EventDispatcher {
     private var _filter3DRenderer:Filter3DRenderer;
     private var _requireDepthRender:Bool;
     private var _depthRender:Texture;
-    private var _depthTextureInvalid:Bool; 
+    private var _depthTextureInvalid:Bool;
     private var _parentIsStage:Bool;
     private var _background:Texture2DBase;
     private var _stage3DProxy:Stage3DProxy;
@@ -94,7 +101,7 @@ class View3D  extends EventDispatcher {
     private var _profile:String;
     private var _layeredView:Bool;
 
-   
+
 
     public function get_depthPrepass():Bool {
         return _depthPrepass;
@@ -105,10 +112,10 @@ class View3D  extends EventDispatcher {
         return value;
     }
 
-     
- 
 
- 
+
+
+
 
     public function new(scene:Scene3D = null, camera:Camera3D = null, renderer:RendererBase = null, forceSoftware:Bool = false, profile:String = "baseline") {
         _width = 0;
@@ -129,11 +136,11 @@ class View3D  extends EventDispatcher {
         _layeredView = false;
         super();
         _profile = profile;
-        _scene = scene;  
-	 
+        _scene = scene;
+
         if (_scene == null){
-			_scene = new Scene3D(); 
-		} 
+			_scene = new Scene3D();
+		}
         _scene.addEventListener(Scene3DEvent.PARTITION_CHANGED, onScenePartitionChanged);
         _camera = camera;
         if (_camera == null)_camera = new Camera3D();
@@ -145,7 +152,7 @@ class View3D  extends EventDispatcher {
         _entityCollector = _renderer.createEntityCollector();
         _entityCollector.camera = _camera;
         _scissorRect = new Rectangle();
-    
+
         _mouse3DManager = new Mouse3DManager();
         _mouse3DManager.enableMouseListeners(this);
         _touch3DManager = new Touch3DManager();
@@ -154,11 +161,11 @@ class View3D  extends EventDispatcher {
         addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
         addEventListener(Event.ADDED, onAdded, false, 0, true);
         _camera.addEventListener(CameraEvent.LENS_CHANGED, onLensChanged);
-        _camera.partition = _scene.partition; 
+        _camera.partition = _scene.partition;
 		init();
     }
 	public function init():Void {
-		
+
 		onAddedToStage(null);
 		onAdded(null);
 	}
@@ -171,7 +178,7 @@ class View3D  extends EventDispatcher {
     }
 
     public function set_rightClickMenuEnabled(val:Bool):Bool {
-        _rightClickMenuEnabled = val; 
+        _rightClickMenuEnabled = val;
         return val;
     }
 
@@ -229,7 +236,7 @@ class View3D  extends EventDispatcher {
         _layeredView = value;
         return value;
     }
- 
+
 
     public function get_filters3d():Array<Dynamic> {
         return (_filter3DRenderer != null) ? _filter3DRenderer.filters : null;
@@ -371,19 +378,19 @@ class View3D  extends EventDispatcher {
 	 * The width of the viewport. When software rendering is used, this is limited by the
 	 * platform to 2048 pixels.
 	 */
- 
+
 
 /**
 	 * The width of the viewport. When software rendering is used, this is limited by the
 	 * platform to 2048 pixels.
 	 */
- 
+
     private  function get_width():Float {
         return _width;
     }
 
     private function set_width(value:Float):Float {
- 
+
 // Backbuffer limitation in software mode. See comment in updateBackBuffer()
         if (_stage3DProxy != null && _stage3DProxy.usesSoftwareRendering && value > 2048)
             value = 2048;
@@ -393,7 +400,7 @@ class View3D  extends EventDispatcher {
 
         if (_rttBufferManager != null)
             _rttBufferManager.viewWidth = Std.int(value);
- 
+
         _width = value;
 
 
@@ -417,11 +424,11 @@ class View3D  extends EventDispatcher {
 	private function get_height():Float {
         return _height;
     }
- 
+
 
 	private function set_height(value:Float):Float {
- 
- 
+
+
 // Backbuffer limitation in software mode. See comment in updateBackBuffer()
         if (_stage3DProxy != null && _stage3DProxy.usesSoftwareRendering && value > 2048)
             value = 2048;
@@ -432,7 +439,7 @@ class View3D  extends EventDispatcher {
         if (_rttBufferManager != null)
             _rttBufferManager.viewHeight = Std.int(value);
 
-         
+
         _height = value;
         _aspectRatio = _width / _height;
         _camera.lens.aspectRatio = _aspectRatio;
@@ -448,7 +455,7 @@ class View3D  extends EventDispatcher {
     }
 
 	private function set_x(value:Float):Float {
- 
+
         if (x == value)
             return value;
 
@@ -457,11 +464,11 @@ class View3D  extends EventDispatcher {
 
         _globalPos.x = parent != null ? parent.localToGlobal(_localPos).x : value;
         _globalPosDirty = true;
-		
+
 		 return value;
     }
 	private function set_y(value:Float):Float {
- 
+
         if (y == value)
             return value;
 
@@ -470,14 +477,14 @@ class View3D  extends EventDispatcher {
 
         _globalPos.y = parent != null ? parent.localToGlobal(_localPos).y : value;
         _globalPosDirty = true;
-		
+
 		 return value;
     }
 	private function set_visible(value:Bool):Void {
-       
+
         if (_stage3DProxy != null && !_shareContext)
             _stage3DProxy.visible = value;
-    } 
+    }
 	private function get_y():Float {
 		return _y;
 	}
@@ -496,14 +503,6 @@ class View3D  extends EventDispatcher {
 	private function get_parent():Stage {
 		return get_stage();
 	}
-	public var mouseX (get_mouseX, never):Float;	
-	public var mouseY (get_mouseY, never):Float; 
-	public var parent (get_parent, never):Stage; 
-	public var stage (get_stage, never):Stage; 
-	public var width (get_width, set_width):Float;
-	public var height (get_height, set_height):Float;
-	public var x (get_x, set_x):Float;
-	public var y (get_y, set_y):Float;
 /**
 	 * The amount of anti-aliasing to be used.
 	 */
@@ -588,7 +587,7 @@ class View3D  extends EventDispatcher {
 	 */
 
     public function addSourceURL(url:String):Void {
-        _sourceURL = url; 
+        _sourceURL = url;
     }
 
 /**
@@ -617,7 +616,7 @@ class View3D  extends EventDispatcher {
 // collect stuff to render
         _scene.traversePartitions(_entityCollector);
 // update picking
-	
+
         _mouse3DManager.updateCollider(this);
         _touch3DManager.updateCollider();
         if (_requireDepthRender) renderSceneDepthToTexture(_entityCollector);
@@ -835,7 +834,7 @@ class View3D  extends EventDispatcher {
         }
         _addedToStage = true;
         if (_stage3DProxy == null) {
-			  
+
             _stage3DProxy = Stage3DManager.getInstance(stage).getFreeStage3DProxy(_forceSoftware, _profile);
             _stage3DProxy.addEventListener(Stage3DEvent.VIEWPORT_UPDATED, onViewportUpdated);
         }
@@ -867,6 +866,6 @@ class View3D  extends EventDispatcher {
     }
 
 // dead ends:
-// dead ends: 
+// dead ends:
 }
 

@@ -51,7 +51,7 @@ class Stage3DProxy extends EventDispatcher {
     public var mouse3DManager(get_mouse3DManager, set_mouse3DManager):Mouse3DManager;
     public var touch3DManager(get_touch3DManager, set_touch3DManager):Touch3DManager;
     #if flash
-    static private var _frameEventDriver:Shape = new Shape();  
+    static private var _frameEventDriver:Shape = new Shape();
 	#end
     public var _context3D:Context3D;
     public var _stage3DIndex:Int;
@@ -104,7 +104,7 @@ class Stage3DProxy extends EventDispatcher {
         dispatchEvent(_exitFrame);
     }
 	#end
-    
+
     /**
 	 * Creates a Stage3DProxy object. This method should not be called directly. Creation of Stage3DProxy objects should
 	 * be handled by Stage3DManager.
@@ -189,7 +189,7 @@ class Stage3DProxy extends EventDispatcher {
         _antiAlias = antiAlias;
         _enableDepthAndStencil = enableDepthAndStencil;
         if (_context3D != null) _context3D.configureBackBuffer(backBufferWidth, backBufferHeight, antiAlias, enableDepthAndStencil);
-	 
+
     }
 
     /*
@@ -261,9 +261,9 @@ class Stage3DProxy extends EventDispatcher {
     #if flash
     override public function addEventListener(type:String, listener:Dynamic -> Void, useCapture:Bool = false, priority:Int = 0, useWeakReference:Bool = false):Void {
         super.addEventListener(type, listener, useCapture, priority, useWeakReference);
-	
+
         if ((type == Event.ENTER_FRAME || type == Event.EXIT_FRAME) && !_frameEventDriver.hasEventListener(Event.ENTER_FRAME)) _frameEventDriver.addEventListener(Event.ENTER_FRAME, onEnterFrame, useCapture, priority, useWeakReference);
-		
+
     }
 
 
@@ -279,9 +279,9 @@ class Stage3DProxy extends EventDispatcher {
     override public function removeEventListener(type:String, listener:Dynamic -> Void, useCapture:Bool = false):Void {
         super.removeEventListener(type, listener, useCapture);
     // Remove the main rendering listener if no EnterFrame listeners remain
-	 
+
         if (!hasEventListener(Event.ENTER_FRAME) && !hasEventListener(Event.EXIT_FRAME) && _frameEventDriver.hasEventListener(Event.ENTER_FRAME)) _frameEventDriver.removeEventListener(Event.ENTER_FRAME, onEnterFrame, useCapture);
-    	 
+
 	}
 	#end
 
@@ -509,7 +509,7 @@ class Stage3DProxy extends EventDispatcher {
             #if flash
             _usesSoftwareRendering = (_context3D.driverInfo.indexOf("Software") == 0);
 			#end
-            
+
             // Only configure back buffer if width and height have been set,
             // which they may not have been if View3D.render() has yet to be
             // invoked for the first time.
@@ -520,7 +520,7 @@ class Stage3DProxy extends EventDispatcher {
             }
 
             setRenderCallback(_callbackMethod);
-            
+
             dispatchEvent(new Stage3DEvent((hadContext) ? Stage3DEvent.CONTEXT3D_RECREATED : Stage3DEvent.CONTEXT3D_CREATED));
         }
 
@@ -556,16 +556,16 @@ class Stage3DProxy extends EventDispatcher {
     private function onEnterFrame(event:Event):Void {
         if (_context3D == null) return;
         clear();
-        
+
         //notify the enterframe listeners
         #if flash
         notifyEnterFrame();
     	#end
-        
+
         // Call the present() to render the frame
         present();
         //notify the exitframe listeners
-        
+
         #if flash
         notifyExitFrame();
         #end

@@ -1,5 +1,5 @@
 /****
-* 
+*
 ****/
 
 package flash.display3D;
@@ -29,10 +29,10 @@ import openfl.gl.GL;
 	@:from static public inline function fromInt(s:Int) {
 		return  new Context3DBlendFactor(s);
 	}
-	@:to public inline function toInt():Int { 
+	@:to public inline function toInt():Int {
         return this;
 	}
- 
+
     inline public static var DESTINATION_ALPHA:Int = GL.DST_ALPHA;
     inline public static var DESTINATION_COLOR:Int = GL.DST_COLOR;
     inline public static var ONE:Int = GL.ONE;

@@ -21,7 +21,7 @@ import flash.display3D.Context3DCompareMode;
 import flash.display3D.textures.TextureBase;
 import flash.geom.Matrix3D;
 import flash.geom.Rectangle;
-import flash.geom.Vector3D; 
+import flash.geom.Vector3D;
 class DefaultRenderer extends RendererBase {
 
     static private var RTT_PASSES:Int = 1;
@@ -98,7 +98,7 @@ class DefaultRenderer extends RendererBase {
             _context.setDepthTest(false, Context3DCompareMode.ALWAYS);
             drawSkyBox(entityCollector);
         }
-	
+
         _context.setDepthTest(true, Context3DCompareMode.LESS_EQUAL);
         var which:Int = (target != null) ? SCREEN_PASSES : ALL_PASSES;
         drawRenderables(entityCollector.opaqueRenderableHead, entityCollector, which);

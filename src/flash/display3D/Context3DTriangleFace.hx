@@ -1,5 +1,5 @@
 /****
-* 
+*
 ****/
 
 package flash.display3D;
@@ -22,7 +22,7 @@ import openfl.gl.GL;
 	@:from static public inline function fromInt(s:Int) {
 		return  new Context3DTriangleFace(s);
 	}
-	@:to public inline function toInt():Int { 
+	@:to public inline function toInt():Int {
         return this;
 	}
     inline public static var BACK = GL.FRONT;

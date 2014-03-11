@@ -1,5 +1,5 @@
 /****
-* 
+*
 ****/
 
 package flash.display3D;
@@ -25,7 +25,7 @@ import openfl.gl.GL;
 	@:from static public inline function fromInt(s:Int) {
 		return  new Context3DCompareMode(s);
 	}
-	@:to public inline function toInt():Int { 
+	@:to public inline function toInt():Int {
         return this;
 	}
     inline static public var ALWAYS = GL.ALWAYS;
@@ -36,7 +36,7 @@ import openfl.gl.GL;
     inline static public var LESS_EQUAL = GL.LEQUAL; // TODO : wrong value
     inline static public var NEVER = GL.NEVER;
     inline static public var NOT_EQUAL = GL.NOTEQUAL;
-	
+
 }
 
 #end
