@@ -179,7 +179,7 @@ class SimpleVideoPlayer implements IVideoPlayer {
         switch(_sw0_) {
             case "NetStream.Play.Stop":
 //this.dispatchEvent( new VideoEvent(VideoEvent.STOP,_netStream, file) );
-                if (loop) _ns.play(_src);
+                if (loop) _ns.seek(0);
             case "NetStream.Play.Play":
 //this.dispatchEvent( new VideoEvent(VideoEvent.PLAY,_netStream, file) );
             case "NetStream.Play.StreamNotFound":
