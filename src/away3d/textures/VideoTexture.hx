@@ -40,7 +40,7 @@ class VideoTexture extends BitmapTexture {
 // sets autplay
         _autoPlay = autoPlay;
 // Sets up the bitmap material
-        super(new BitmapData(_materialWidth, _materialHeight, true, 0));
+        super(new BitmapData(_materialWidth, _materialHeight, true, 0), false);
 // if autoplay start video
         if (autoPlay) _player.play();
         autoUpdate = true;
