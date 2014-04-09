@@ -130,7 +130,6 @@ class LatheExtrude extends Mesh {
         var geom:Geometry = new Geometry();
         _subGeometry = new SubGeometry();
         if (material == null && materials != null && materials.front != null) material = materials.front;
-        super(geom, material);
         _profile = profile;
         _axis = axis;
         _revolutions = revolutions;
@@ -145,6 +144,7 @@ class LatheExtrude extends Mesh {
         _ignoreSides = ignoreSides;
         _tweek = tweek;
         _smoothSurface = smoothSurface;
+        super(geom, material);
     }
 
 /*

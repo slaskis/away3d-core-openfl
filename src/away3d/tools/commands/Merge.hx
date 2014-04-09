@@ -30,7 +30,7 @@ class Merge {
 	 * @param    objectSpace     [optional]    Determines if source mesh(es) is/are merged using objectSpace or worldspace. Defaults to false.
 	 */
 
-    function new(keepMaterial:Bool = false, disposeSources:Bool = false, objectSpace:Bool = false) {
+    public function new(keepMaterial:Bool = false, disposeSources:Bool = false, objectSpace:Bool = false) {
         _keepMaterial = keepMaterial;
         _disposeSources = disposeSources;
         _objectSpace = objectSpace;
